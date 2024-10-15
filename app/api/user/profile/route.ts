@@ -11,8 +11,8 @@ export async function GET() {
   }
 
   const { data, error } = await supabase
-    .from('portal_profiles')
-    .select(`username, full_name, website, avatar_url, current_year, current_branch, phone_number, github_url, instagram_url, linkedin_url, rfid_tag, prn`)
+    .from('profiles')
+    .select(`username, full_name, website, phone_number, avatar_url, current_year, current_branch, prn, github_url, instagram_url, linkedin_url, rfid_tag`)
     .eq('id', user.id)
     .single()
 
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
       updated_at: new Date().toISOString(),
     }
   
-    const { data, error } = await supabase.from('portal_profiles').upsert(updates)
+    const { data, error } = await supabase.from('profiles').upsert(updates)
   
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 })

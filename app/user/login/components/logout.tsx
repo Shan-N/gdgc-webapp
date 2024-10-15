@@ -54,6 +54,10 @@ const AvatorProfileDropdown: React.FC = () => {
     router.push('/user/profile');
   };
 
+  const handleResponseClick = () => {
+    router.push('/forms/responses');
+  };
+
   const getInitials = (email: string | null) => {
     if (!email) return '';
     return email.split('@')[0].slice(0, 2).toUpperCase();
@@ -98,6 +102,10 @@ const AvatorProfileDropdown: React.FC = () => {
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuItem onClick={handleProfileClick}>
             Profile
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={handleResponseClick}>
+            Responses
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout}>

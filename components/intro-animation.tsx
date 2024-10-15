@@ -38,13 +38,13 @@ const IntroAnimation: React.FC = () => {
     if (index < words.length) {
       const timeout = setTimeout(() => {
         setIndex(index + 1);
-      }, index === 0 ? 800 : 700);
+      }, index === 0 ? 400 : 350);
       return () => clearTimeout(timeout);
     } else if (index === words.length) {
       const timeout = setTimeout(() => {
         setShowFinalText(true);
-        setTimeout(() => setIsAnimationComplete(true), 3000); // Start fading out after final text appears
-      }, 300);
+        setTimeout(() => setIsAnimationComplete(true), 1300);
+      }, 150);
       return () => clearTimeout(timeout);
     }
   }, [index]);
@@ -90,17 +90,24 @@ const IntroAnimation: React.FC = () => {
               </AnimatePresence>
               {showFinalText && (
                 <motion.div
-                  className="flex items-center justify-center text-white text-5xl font-bold absolute z-20"
+                  className="flex items-center space-x-2 text-white text-5xl font-light absolute z-20"
                   variants={finalTextFadeIn}
                   initial="initial"
                   animate="animate"
                 >
-                  <img
-                    src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1727879247/gdgc/gdgc-logo_qkziza.png"
-                    alt="GDSC Logo"
-                    className="w-24 h-12 mr-4"
-                  />
-                  GDSC PCCoE
+                <div className="flex items-center space-x-6">
+                  <div>
+                    <picture>
+                      <img src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1727879247/gdgc/gdgc-logo_qkziza.png" alt="GDGC PCCoE Logo" className="w-25 h-12" />
+                    </picture>
+                  </div>
+                  <div>
+                    <a className="text-4xl font-bold">GDGC PCCoE</a>
+                    <a className="text-xl hidden md:block">
+                      Google Developer Student Clubs, PCCoE
+                    </a>
+                  </div>
+                </div>
                 </motion.div>
               )}
               <svg className="absolute top-0 w-full h-[calc(100%+300px)]">

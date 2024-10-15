@@ -264,7 +264,7 @@ export default function UserProfile() {
         setCropModalOpen(false)
       }
     }
-  }, [completedCrop, imageRef, user, profile])
+  }, [completedCrop, imageRef, user, getCroppedImg, profile])
 
   async function changePassword() {
     if (!newPassword) {
@@ -322,7 +322,7 @@ export default function UserProfile() {
   }
 
   return (
-    <div className="p-6 py-24">
+    <div className="p-6 mt-4 pb-24">
       <div className="max-w-6xl mx-auto">
         <AHHHHBACKKKKK />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -369,7 +369,7 @@ export default function UserProfile() {
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     />
                   </Avatar>
-                  <div>
+                  <div className='truncate'>
                     <h3 className="font-medium">{profile.full_name || 'Your Name'}</h3>
                     <p className="text-sm text-gray-500">{user.email}</p>
                     <p className="text-sm text-blue-500 cursor-pointer mt-1">Click avatar to upload new photo</p>
