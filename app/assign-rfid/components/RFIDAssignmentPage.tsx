@@ -31,7 +31,6 @@ type NDEFReadingEvent = {
 
 type UserDetails = {
   full_name: string | null;
-  email: string | null;
 };
 
 declare global {
@@ -86,9 +85,10 @@ const NFCAssignmentPage: React.FC = () => {
     }
   };
 
-  const fetchUserDetails = async (prn: string) => {
+  const fetchUserDetails = async () => {
     setError(null);
     setUserDetails(null);
+    setLoading(true);
 
     try {
       const { data, error } = await supabase
@@ -100,37 +100,30 @@ const NFCAssignmentPage: React.FC = () => {
       if (error) throw error;
 
       if (data) {
-        // Fetch the email from auth.users table
-        const { data: userData, error: userError } = await supabase
-          .from('auth.users')
-          .select('email')
-          .eq('id', data.id)
-          .single();
-
-        if (userError) throw userError;
-
         setUserDetails({
           full_name: data.full_name,
-          email: userData?.email || null
         });
       } else {
         throw new Error("No user found with the given PRN");
       }
     } catch (error) {
-      setError("Error fetching user details: " + (error instanceof Error ? error.message : String(error)));
+      setError("Error fetching user details: " + (error instanceof Error ? error.message : String(error)) + "\n   Most likely the user does not exist in the database.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!userDetails || !nfcData) {
+      setError("Please ensure a valid user is found and NFC tag is scanned before submitting.");
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
-      if (!nfcData) {
-        throw new Error("No NFC data available. Please scan an NFC card first.");
-      }
-
       const { data, error } = await supabase
         .from('profiles')
         .update({ nfc_tag: nfcData.serialNumber })
@@ -158,7 +151,7 @@ const NFCAssignmentPage: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen p-6">
       <Card className="w-full max-w-[400px]">
         <CardHeader>
           <CardTitle>NFC Assignment</CardTitle>
@@ -171,23 +164,30 @@ const NFCAssignmentPage: React.FC = () => {
               <Input
                 id="prn"
                 value={prn}
-                onChange={(e) => {
-                  setPrn(e.target.value);
-                  if (e.target.value.length >= 8) { // Assuming PRN is at least 8 characters
-                    fetchUserDetails(e.target.value);
-                  } else {
-                    setUserDetails(null);
-                  }
-                }}
+                onChange={(e) => setPrn(e.target.value)}
                 placeholder="Enter PRN"
                 required
               />
             </div>
+            <Button 
+              type="button" 
+              onClick={fetchUserDetails} 
+              disabled={loading || prn.length < 8}
+              className="w-full"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Searching...
+                </>
+              ) : (
+                'Search User'
+              )}
+            </Button>
             {userDetails && (
               <Alert>
                 <AlertDescription>
-                  Full Name: {userDetails.full_name}<br />
-                  Email: {userDetails.email}
+                  Full Name: {userDetails.full_name}
                 </AlertDescription>
               </Alert>
             )}
@@ -195,7 +195,7 @@ const NFCAssignmentPage: React.FC = () => {
               <Button 
                 type="button" 
                 onClick={handleReadNFC} 
-                disabled={isReading}
+                disabled={isReading || !userDetails}
                 className="w-full"
               >
                 {isReading ? (
