@@ -137,13 +137,18 @@ const NFCAssignmentPage: React.FC = () => {
       if (error) throw error;
 
       if (data && data.length > 0) {
+        // Show the success toast
         toast({
           title: "Success",
           description: `RFID tag (${nfcData.serialNumber}) assigned to user ${userDetails.full_name} with PRN: ${prn}`,
         });
-        setPrn('');
-        setNfcData(null);
-        setUserDetails(null);
+
+        // Delay clearing the form fields after showing the toast
+        setTimeout(() => {
+          setPrn('');
+          setNfcData(null);
+          setUserDetails(null);
+        }, 1000);  // Adjust the delay if necessary
       } else {
         throw new Error("No user found with the given PRN. Please try again.");
       }
@@ -153,6 +158,7 @@ const NFCAssignmentPage: React.FC = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="flex items-center justify-center min-h-screen p-6">
