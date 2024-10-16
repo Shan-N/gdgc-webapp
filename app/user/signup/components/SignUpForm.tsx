@@ -124,10 +124,10 @@ const SignUpForm = () => {
                   <SelectValue placeholder="Select year" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1">First Year</SelectItem>
-                  <SelectItem value="2">Second Year</SelectItem>
-                  <SelectItem value="3">Third Year</SelectItem>
-                  <SelectItem value="4">Fourth Year</SelectItem>
+                  <SelectItem value="First">First Year</SelectItem>
+                  <SelectItem value="Second">Second Year</SelectItem>
+                  <SelectItem value="Third">Third Year</SelectItem>
+                  <SelectItem value="Fourth">Fourth Year</SelectItem>
                 </SelectContent>
               </Select>
             </div>
