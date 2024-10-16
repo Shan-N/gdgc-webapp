@@ -119,23 +119,23 @@ const NFCAssignmentPage: React.FC = () => {
       setError("Please ensure a valid user is found and NFC tag is scanned before submitting.");
       return;
     }
-
+  
     setLoading(true);
     setError(null);
-
+  
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .update({ nfc_tag: nfcData.serialNumber })
+        .update({ rfid_tag: nfcData.serialNumber })
         .eq('prn', prn)
         .select();
-
+  
       if (error) throw error;
-
+  
       if (data && data.length > 0) {
         toast({
           title: "Success",
-          description: `NFC tag assigned to user with PRN: ${prn}`,
+          description: `RFID tag assigned to user with PRN: ${prn}`,
         });
         setPrn('');
         setNfcData(null);
@@ -149,6 +149,7 @@ const NFCAssignmentPage: React.FC = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen p-6">
