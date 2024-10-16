@@ -80,7 +80,7 @@ const NFCAssignmentPage: React.FC = () => {
       }
     } catch (error) {
       console.error(error);
-      setError("Failed to read NFC: " + (error instanceof Error ? error.message : String(error)));
+      setError("Failed to read NFC: " + (error instanceof Error ? error.message : String(error)) + ". Please try again or ensure your device supports NFC.");
       setIsReading(false);
     }
   };
@@ -91,6 +91,10 @@ const NFCAssignmentPage: React.FC = () => {
     setLoading(true);
 
     try {
+      if (!prn || prn.length < 8) {
+        throw new Error("Invalid PRN entered. Please ensure PRN is at least 8 characters long.");
+      }
+
       const { data, error } = await supabase
         .from('profiles')
         .select('full_name, id')
@@ -104,10 +108,10 @@ const NFCAssignmentPage: React.FC = () => {
           full_name: data.full_name,
         });
       } else {
-        throw new Error("No user found with the given PRN");
+        throw new Error("No user found with the given PRN. Please check and try again.");
       }
     } catch (error) {
-      setError("Error fetching user details: " + (error instanceof Error ? error.message : String(error)) + "\n   Most likely the user does not exist in the database.");
+      setError("Error fetching user details: " + (error instanceof Error ? error.message : String(error)) + ". Most likely the user does not exist in the database.");
     } finally {
       setLoading(false);
     }
@@ -119,37 +123,36 @@ const NFCAssignmentPage: React.FC = () => {
       setError("Please ensure a valid user is found and NFC tag is scanned before submitting.");
       return;
     }
-  
+
     setLoading(true);
     setError(null);
-  
+
     try {
       const { data, error } = await supabase
         .from('profiles')
         .update({ rfid_tag: nfcData.serialNumber })
         .eq('prn', prn)
         .select();
-  
+
       if (error) throw error;
-  
+
       if (data && data.length > 0) {
         toast({
           title: "Success",
-          description: `RFID tag assigned to user with PRN: ${prn}`,
+          description: `RFID tag (${nfcData.serialNumber}) assigned to user ${userDetails.full_name} with PRN: ${prn}`,
         });
         setPrn('');
         setNfcData(null);
         setUserDetails(null);
       } else {
-        throw new Error("No user found with the given PRN");
+        throw new Error("No user found with the given PRN. Please try again.");
       }
     } catch (error) {
-      setError("Error: " + (error instanceof Error ? error.message : String(error)));
+      setError("Error assigning NFC tag: " + (error instanceof Error ? error.message : String(error)) + ". Please check your inputs and try again.");
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="flex items-center justify-center min-h-screen p-6">
