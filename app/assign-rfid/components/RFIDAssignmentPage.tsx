@@ -29,6 +29,11 @@ type NDEFReadingEvent = {
   };
 };
 
+type UserDetails = {
+  full_name: string | null;
+  email: string | null;
+};
+
 declare global {
   interface Window {
     NDEFReader: {
@@ -46,6 +51,7 @@ interface NDEFReader {
 const NFCAssignmentPage: React.FC = () => {
   const [prn, setPrn] = useState('');
   const [nfcData, setNfcData] = useState<NFCData | null>(null);
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const [isReading, setIsReading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -80,6 +86,41 @@ const NFCAssignmentPage: React.FC = () => {
     }
   };
 
+  const fetchUserDetails = async (prn: string) => {
+    setError(null);
+    setUserDetails(null);
+
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('full_name, id')
+        .eq('prn', prn)
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        // Fetch the email from auth.users table
+        const { data: userData, error: userError } = await supabase
+          .from('auth.users')
+          .select('email')
+          .eq('id', data.id)
+          .single();
+
+        if (userError) throw userError;
+
+        setUserDetails({
+          full_name: data.full_name,
+          email: userData?.email || null
+        });
+      } else {
+        throw new Error("No user found with the given PRN");
+      }
+    } catch (error) {
+      setError("Error fetching user details: " + (error instanceof Error ? error.message : String(error)));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -105,6 +146,7 @@ const NFCAssignmentPage: React.FC = () => {
         });
         setPrn('');
         setNfcData(null);
+        setUserDetails(null);
       } else {
         throw new Error("No user found with the given PRN");
       }
@@ -129,11 +171,26 @@ const NFCAssignmentPage: React.FC = () => {
               <Input
                 id="prn"
                 value={prn}
-                onChange={(e) => setPrn(e.target.value)}
+                onChange={(e) => {
+                  setPrn(e.target.value);
+                  if (e.target.value.length >= 8) { // Assuming PRN is at least 8 characters
+                    fetchUserDetails(e.target.value);
+                  } else {
+                    setUserDetails(null);
+                  }
+                }}
                 placeholder="Enter PRN"
                 required
               />
             </div>
+            {userDetails && (
+              <Alert>
+                <AlertDescription>
+                  Full Name: {userDetails.full_name}<br />
+                  Email: {userDetails.email}
+                </AlertDescription>
+              </Alert>
+            )}
             <div className="space-y-2">
               <Button 
                 type="button" 
@@ -166,7 +223,7 @@ const NFCAssignmentPage: React.FC = () => {
             <Button 
               type="submit" 
               className="w-full" 
-              disabled={loading || !nfcData}
+              disabled={loading || !nfcData || !userDetails}
             >
               {loading ? (
                 <>
