@@ -111,7 +111,7 @@ const NFCAssignmentPage: React.FC = () => {
         throw new Error("No user found with the given PRN. Please check and try again.");
       }
     } catch (error) {
-      setError("Error fetching user details: " + (error instanceof Error ? error.message : String(error)) + ". Most likely the user does not exist in the database.");
+      setError((error instanceof Error ? error.message : String(error)) + ". The user does not exist in the database.");
     } finally {
       setLoading(false);
     }
