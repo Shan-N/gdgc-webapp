@@ -18,7 +18,7 @@ const SignUpForm = () => {
   const router = useRouter();
 
   const validateEmail = (email: string) => {
-    if (!email.endsWith('@gmail.com')) {
+    if (!email.endsWith('@pccoepune.org')) {
       setEmailError('Only emails ending with @pccoepune.org are allowed');
       return false;
     }
@@ -58,6 +58,7 @@ const SignUpForm = () => {
           email: formData.get('email'),
           password: formData.get('password'),
           full_name: formData.get('full_name'),
+          username: formData.get('username'),
           current_year: formData.get('current_year'),
           current_branch: formData.get('current_branch'),
           phone_number: formData.get('phone_number'),
@@ -80,12 +81,11 @@ const SignUpForm = () => {
     }
   };
 
-
   return (
     <div className="container mx-auto py-10">
       <Card className="w-full max-w-md mx-auto">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">GDGC PCCoE Sign Up</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">GDSC PCCoE Sign Up</CardTitle>
         </CardHeader>
         <CardContent>
           {generalError && (
@@ -99,6 +99,13 @@ const SignUpForm = () => {
               <div className="relative">
                 <UserIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                 <Input id="full_name" name="full_name" placeholder="John Doe" className="pl-10" required />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="username">Username</Label>
+              <div className="relative">
+                <UserIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <Input id="username" name="username" placeholder="johndoe" className="pl-10" required minLength={3} />
               </div>
             </div>
             <div className="space-y-2">
@@ -199,7 +206,7 @@ const SignUpForm = () => {
           </Button>
           <Alert variant="default" className="mt-4">
             <AlertDescription>
-              Need help? Contact the team at <a href="mailto:help@gdgcpccoe.org" className="font-semibold hover:underline">help@gdgcpccoe.org</a>
+              Need help? Contact the team at <a href="mailto:help@gdscpccoe.org" className="font-semibold hover:underline">help@gdscpccoe.org</a>
             </AlertDescription>
           </Alert>
         </CardFooter>
