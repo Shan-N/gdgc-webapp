@@ -66,7 +66,7 @@ export default function FormResponses() {
           particleCount: 100,
           spread: 70,
           origin: { y: 0.6 },
-          colors: ['#4285F4', '#DB4437', '#F4B400', '#0F9D58'], // GDSC colors
+          colors: ['#4285F4', '#DB4437', '#F4B400', '#0F9D58'],
         });
       }
     } catch (e) {
@@ -109,7 +109,7 @@ export default function FormResponses() {
   if (error) return <div className="text-red-600 text-center mt-40">Error: {error}</div>;
 
   return (
-    <div className="container mx-auto p-8 mt-40 min-h-screen">
+    <div className="container mx-auto p-8 mt-25 min-h-screen">
       <Card className="w-full max-w-4xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
           <CardTitle className="text-4xl font-extrabold">

@@ -117,7 +117,7 @@ const NFCAssignmentPage: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+ const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userDetails || !nfcData) {
       setError("Please ensure a valid user is found and NFC tag is scanned before submitting.");
@@ -143,12 +143,11 @@ const NFCAssignmentPage: React.FC = () => {
           description: `RFID tag (${nfcData.serialNumber}) assigned to user ${userDetails.full_name} with PRN: ${prn}`,
         });
 
-        // Delay clearing the form fields after showing the toast
         setTimeout(() => {
           setPrn('');
           setNfcData(null);
           setUserDetails(null);
-        }, 1000);  // Adjust the delay if necessary
+        }, 3000);
       } else {
         throw new Error("No user found with the given PRN. Please try again.");
       }

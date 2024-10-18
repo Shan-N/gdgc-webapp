@@ -72,7 +72,7 @@ export default function FormResponsesPage() {
       </div>
     );
   }
-
+  
   if (error) {
     return (
       <div className="container mx-auto p-8 mt-20 text-center">
