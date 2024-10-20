@@ -1,9 +1,9 @@
 import React from 'react';
-import localFont from "next/font/local";
-import AvatorProfileDropdown from "@/app/user/login/components/logout";
+import localFont from "next/font/local"; 
 import "./globals.css";
-import NavigationMenu from '@/components/NavigationMenu';
-import { Metadata } from 'next/types';
+import { Metadata, Viewport  } from 'next/types';
+import GlobalHeader from '@/components/globalheader';
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -49,12 +49,16 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
   alternates: {
     canonical: "https://gdgcpccoe.org",
   },
 };
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+}
 
 export default function RootLayout({
   children,
@@ -72,30 +76,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       > 
-        <header className="w-full fixed top-0 left-0 right-0 bg-white shadow-md z-20">
-          <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <NavigationMenu />
-              <div className="flex items-center space-x-2">
-                <div>
-                  <picture>
-                    <img src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1727879247/gdgc/gdgc-logo_qkziza.png" alt="GDGC PCCoE Logo" className="w-10 h-5" />
-                  </picture>
-                </div>
-                <div>
-                  <a href="/" className="text-xl font-bold text-gray-800">GDGC PCCoE</a>
-                  <a href="/" className="text-sm text-gray-600 hidden md:block">
-                    Google Developer Student Clubs, PCCoE
-                  </a>
-                </div>
-              </div>
-            </div>
-            <AvatorProfileDropdown />
+        <GlobalHeader />
+          <div className="pt-16  bg-gradient-to-br from-blue-200 to-purple-200">
+            {children}
           </div>
-        </header>
-        <div className="pt-16  bg-gradient-to-br from-blue-200 to-purple-200">
-          {children}
-        </div>
       </body>
     </html>
   );

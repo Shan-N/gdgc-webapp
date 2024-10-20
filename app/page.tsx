@@ -10,6 +10,7 @@ import TeamCardWebapp from '@/components/CTAs/TeamBehindWebapp';
 import { WavyBackground } from '@/components/ui/wavy-background';
 
 import { Bebas_Neue } from "next/font/google";
+import EventsPromoCard from '@/components/CTAs/EventsPromoCard';
 const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
   weight: ['400'],
@@ -23,7 +24,7 @@ export default function Home() {
     const timer = setTimeout(() => {
       setShowIntroduction(false);
       setIntroFinished(true);
-    }, 4000);
+    }, 4200);
 
     return () => clearTimeout(timer);
   }, []);
@@ -39,13 +40,12 @@ export default function Home() {
   }, []);
 
 
-  
   return (
       <main className="items-center justify-items-center min-h-screen  font-[family-name:var(--font-geist-sans)]">
         {showIntroduction && <IntroAnimation />}
 
         <div className="relative">
-          <WavyBackground className="pb-48" />
+          <WavyBackground className="pb-36" />
           <div className={`transition-opacity p-4 duration-500 ${showIntroduction ? 'opacity-0' : 'opacity-100'}`}>
             <div className={bebasNeue.className}>
               <h1 className="mb-4 text-5xl text-center z-20 font-normal tracking-wider leading-none text-gray-900 md:text-6xl lg:text-[92px]">Welcome to GDGC, PCCoE</h1>
@@ -60,6 +60,7 @@ export default function Home() {
               <TeamCard />
               <RFIDCard />
               <TeamCardWebapp />
+              <EventsPromoCard />
             </>
           )}
         </div>

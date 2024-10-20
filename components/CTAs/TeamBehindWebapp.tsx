@@ -19,7 +19,7 @@ const TeamCardWebapp = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
-              Meet Our Team
+              The Team Behind the Webapp
             </motion.h2>
             <motion.p 
               className="mb-6 text-lg"

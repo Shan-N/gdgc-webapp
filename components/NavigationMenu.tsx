@@ -6,7 +6,7 @@ import { CreditCard, Home, Info, Menu, PersonStanding, Smartphone } from 'lucide
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
-export default function NavigationMenu() {
+export default function NavigationBurger() {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
 
