@@ -21,14 +21,15 @@ const PasswordResetPage = () => {
   useEffect(() => {
     const token_hash = searchParams.get('token_hash');
     const access_token = searchParams.get('access_token');
-  
+    
     if (token_hash && access_token) {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (!session) {
-          supabase.auth.verifyOtp({ token_hash, type: 'recovery', token: access_token });
-        }
-      });
-    } else if (!token_hash) {
+      supabase.auth.verifyOtp({ token_hash, type: 'recovery', token: access_token })
+        .then(({ error }) => {
+          if (error) {
+            setError('Invalid or expired reset token. Please try resetting your password again.');
+          }
+        });
+    } else {
       setError('Invalid or missing reset token. Please try resetting your password again.');
     }
   }, [searchParams, supabase.auth]);
@@ -38,17 +39,8 @@ const PasswordResetPage = () => {
     setLoading(true);
     setError('');
   
-    const token_hash = searchParams.get('token_hash');
-    if (!token_hash) {
-      setError('Invalid or missing reset token. Please try resetting your password again.');
-      setLoading(false);
-      return;
-    }
-  
     try {
-      const { error } = await supabase.auth.updateUser({
-        password: newPassword
-      });
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
   
       if (error) throw error;
       setSuccess(true);
@@ -59,7 +51,6 @@ const PasswordResetPage = () => {
       setLoading(false);
     }
   };
-
 
   if (success) {
     return (
