@@ -8,17 +8,19 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { LockIcon, MailIcon, Loader2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     setError('');
-    const formData = new FormData(event.currentTarget);
 
     try {
       const response = await fetch('/api/auth/login', {
@@ -26,10 +28,7 @@ const LoginForm = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          email: formData.get('email'),
-          password: formData.get('password'),
-        }),
+        body: JSON.stringify({ email, password }),
       });
 
       const result = await response.json();
@@ -38,8 +37,7 @@ const LoginForm = () => {
         throw new Error(result.error || 'An error occurred during login');
       }
 
-      // Successful login
-      router.push('/user/profile'); // Redirect to dashboard or appropriate page
+      router.push('/user/profile');
     } catch (error) {
       console.error(error);
       setError(error instanceof Error ? error.message : 'An unexpected error occurred');
@@ -49,11 +47,11 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center py-6 px-8 pb-20 gap-16 sm:p-6">
-      <Card className="w-full max-w-md mx-auto shadow-lg relative z-10 bg-white bg-opacity-80">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 to-purple-100 py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">GDGC PCCoE Login</CardTitle>
-          <p className='text-sm text-muted-foreground text-center'>You&apos;re about to take a head first dive into innovation, creativity, and collaboration.</p>
+          <CardTitle className="text-2xl font-bold text-center">Welcome</CardTitle>
+          <p className='text-sm text-muted-foreground text-center'>Sign in to your GDSC PCCoE account</p>
         </CardHeader>
         <CardContent>
           <form className="space-y-4" onSubmit={handleSubmit}>
@@ -61,14 +59,30 @@ const LoginForm = () => {
               <Label htmlFor="email">Email</Label>
               <div className="relative">
                 <MailIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                <Input id="email" name="email" type="email" placeholder="you@pccoepune.org" className="pl-10" required />
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="you@pccoepune.org" 
+                  className="pl-10" 
+                  required 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <LockIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                <Input id="password" name="password" type="password" placeholder="••••••••" className="pl-10" required />
+                <Input 
+                  id="password" 
+                  type="password" 
+                  placeholder="••••••••" 
+                  className="pl-10" 
+                  required 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
             </div>
             {error && (
@@ -76,30 +90,24 @@ const LoginForm = () => {
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
-            <Button 
-              type="submit" 
-              className="w-full flex items-center justify-center"
+            <Button type="submit" 
+              className="w-full" 
               disabled={loading}
             >
-              {loading ? <Loader2Icon className="animate-spin mr-2" size={18} /> : null}
-              {loading ? 'Logging in...' : 'Log in'}
+              {loading ? (
+                <Loader2Icon className="animate-spin" size={18} />
+              ) : (
+                <LockIcon size={18} />
+              )}
+              Sign In
             </Button>
           </form>
         </CardContent>
-        <p className='text-center mb-4'> -------- or -------- </p>
-        <CardFooter className="flex flex-col items-center space-y-2 pt-0">
-          <Button 
-            variant="outline" 
-            className="w-full"
-            onClick={() => router.push('/user/signup')}
-          >
-            Sign Up
-          </Button>
-          <Alert variant="default" className="mt-4 bg-blue-50 text-blue-800 border-blue-200">
-            <AlertDescription>
-              Unable to access? Contact the team at <a href="mailto:help@gdgcpccoe.org" className="font-semibold hover:underline">help@gdgcpccoe.org</a>
-            </AlertDescription>
-          </Alert>
+        <CardFooter className="flex flex-col text-sm text-muted-foreground text-center">
+          <Link href="/user/forgot-password" className="text-blue-600 hover:text-blue-800">
+            Forgot Password?
+          </Link>
+          <p className="mt-2">Don&apos;t have an account? <Link href="/user/signup" className="text-blue-600 hover:text-blue-800">Sign Up</Link></p>
         </CardFooter>
       </Card>
     </div>

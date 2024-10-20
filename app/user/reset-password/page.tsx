@@ -1,10 +1,10 @@
 import React, { Suspense } from 'react';
-import SignUpConfirmation from './components/SignUp';
+import PasswordResetPage from '@/app/user/reset-password/components/PasswordResetPage';
 
 export default function Page() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <SignUpConfirmation />
+      <PasswordResetPage />
     </Suspense>
   );
 }

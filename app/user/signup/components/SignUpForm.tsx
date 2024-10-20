@@ -18,7 +18,7 @@ const SignUpForm = () => {
   const router = useRouter();
 
   const validateEmail = (email: string) => {
-    if (!email.endsWith('@pccoepune.org')) {
+    if (!email.endsWith('@gmail.com')) {
       setEmailError('Only emails ending with @pccoepune.org are allowed');
       return false;
     }
@@ -38,16 +38,10 @@ const SignUpForm = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const email = formData.get('email') as string;
-    const phone = formData.get('phone_number') as string;
-
-    if (!validateEmail(email) || !validatePhone(phone)) {
-      return;
-    }
-
+  
     setLoading(true);
     setGeneralError('');
-
+  
     try {
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
@@ -65,14 +59,14 @@ const SignUpForm = () => {
           prn: formData.get('prn'),
         }),
       });
-
+  
       const result = await response.json();
-
+  
       if (!response.ok) {
         throw new Error(result.error || 'An error occurred during signup');
       }
-
-      router.push('/user/signup/SignUpConfirmation');
+  
+      router.push(`/user/signup/SignUpConfirmation?email=${encodeURIComponent(formData.get('email') as string)}`);
     } catch (error) {
       console.error(error);
       setGeneralError((error as Error).message || 'An unexpected error occurred. Please try again.');
@@ -82,23 +76,25 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="container mx-auto py-10">
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader>
+    <div className="min-h-screen flex items-center justify-center pt-44 py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">GDSC PCCoE Sign Up</CardTitle>
         </CardHeader>
         <CardContent>
           {generalError && (
-            <Alert variant="destructive" className="mb-4">
+            <Alert variant="destructive" className="mb-6">
               <AlertDescription>{generalError}</AlertDescription>
             </Alert>
           )}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="full_name">Full Name</Label>
-              <div className="relative">
-                <UserIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                <Input id="full_name" name="full_name" placeholder="John Doe" className="pl-10" required />
+              <Label htmlFor="full_name" className="text-sm font-medium">Full Name</Label>
+              <div className="relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <UserIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                </div>
+                <Input id="full_name" name="full_name" placeholder="John Doe" className="pl-10 block w-full" required />
               </div>
             </div>
             <div className="space-y-2">
@@ -125,7 +121,7 @@ const SignUpForm = () => {
               {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="current_year">Current Year</Label>
+              <Label htmlFor="current_year" className="text-sm font-medium">Current Year</Label>
               <Select name="current_year" required>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select year" />
@@ -187,26 +183,32 @@ const SignUpForm = () => {
             </div>
             <Button 
               type="submit" 
-              className="w-full"
+              className="w-full bg-gray-600 hover:bg-gray-700 text-white"
               disabled={loading || !!emailError || !!phoneError}
             >
               {loading ? <Loader2Icon className="animate-spin mr-2" /> : null}
               {loading ? 'Signing up...' : 'Sign Up'}
             </Button>
           </form>
-        </CardContent>
-        <p className='text-center mb-4'> -------- or -------- </p>
-        <CardFooter className="flex flex-col items-center space-y-2">
+          </CardContent>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-white text-gray-500">Or</span>
+          </div>
+        </div>
+        <CardFooter className="flex flex-col items-center space-y-4 mt-6">
           <Button 
             variant="outline" 
-            className="w-full"
-            onClick={() => router.push('/user/login')}
+            className="w-full" onClick={() => router.push('/user/login')}
           >
             Already have an account? Log in
           </Button>
           <Alert variant="default" className="mt-4">
             <AlertDescription>
-              Need help? Contact the team at <a href="mailto:help@gdscpccoe.org" className="font-semibold hover:underline">help@gdscpccoe.org</a>
+              Need help? Contact the team at <a href="mailto:help@gdgcpccoe.org" className="font-semibold hover:underline">help@gdgcpccoe.org</a>
             </AlertDescription>
           </Alert>
         </CardFooter>

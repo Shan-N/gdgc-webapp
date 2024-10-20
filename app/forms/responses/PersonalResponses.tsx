@@ -6,8 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from 'framer-motion';
-import confetti from 'canvas-confetti';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ChevronRight, ClipboardList, AlertCircle } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 type Question = {
   id: string;
@@ -37,9 +38,7 @@ export default function FormResponses() {
     const fetchForms = async () => {
       try {
         const res = await fetch('/api/forms');
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
         setForms(data);
       } catch (e) {
@@ -56,17 +55,15 @@ export default function FormResponses() {
     setIsLoading(true);
     try {
       const res = await fetch(`/api/forms?id=${formId}`);
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const formData = await res.json();
       setSelectedForm(formData);
       if (formData.filled) {
         confetti({
-          particleCount: 100,
-          spread: 70,
+          particleCount: 150,
+          spread: 80,
           origin: { y: 0.6 },
-          colors: ['#4285F4', '#DB4437', '#F4B400', '#0F9D58'],
+          colors: ['#E0BBE4', '#957DAD', '#D291BC'], // Lighter confetti colors
         });
       }
     } catch (e) {
@@ -83,93 +80,131 @@ export default function FormResponses() {
     }
   };
 
-  const skeletonLoader = (
-    <Skeleton className="h-10 w-full mb-4" />
-  );
-
   if (isLoading) {
     return (
-      <div className="container mx-auto p-8 mt-40 min-h-screen">
-        <Card className="w-full max-w-4xl mx-auto bg-white shadow-xl">
-          <CardHeader>
-            <CardTitle className="text-3xl font-extrabold text-gray-800">
-              Loading Forms...
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {Array.from({ length: 4 }).map((_, idx) => (
-              <div key={idx}>{skeletonLoader}</div>
-            ))}
-          </CardContent>
-        </Card>
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-pink-100 via-transparent to-purple-100 opacity-70" />
+        <div className="relative z-10 container mx-auto p-8 pt-40">
+          <Card className="w-full max-w-4xl mx-auto backdrop-blur-sm bg-white/90">
+            <CardHeader>
+              <Skeleton className="h-8 w-2/3 mb-4" />
+              <Skeleton className="h-4 w-1/2" />
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {Array.from({ length: 3 }).map((_, idx) => (
+                <Skeleton key={idx} className="h-16 w-full" />
+              ))}
+            </CardContent>
+          </Card>
+        </div>
       </div>
     );
   }
 
-  if (error) return <div className="text-red-600 text-center mt-40">Error: {error}</div>;
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto" />
+          <p className="text-xl text-red-600">Error: {error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="container mx-auto p-8 mt-25 min-h-screen">
-      <Card className="w-full max-w-4xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-          <CardTitle className="text-4xl font-extrabold">
-            Your GDSC Forms
-          </CardTitle>
-          <CardDescription className="text-blue-100 mt-2">
-            Select a form to view its details and responses.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="py-8">
-          <Select onValueChange={handleSelectForm}>
-            <SelectTrigger className="w-full mb-6 rounded-md border border-gray-300 shadow-sm focus:ring focus:ring-blue-500">
-              <SelectValue placeholder="Choose a form" />
-            </SelectTrigger>
-            <SelectContent>
-              {forms.map((form) => (
-                <SelectItem key={form.id} value={form.id}>
-                  {form.title} {form.filled ? "(Filled)" : ""}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <AnimatePresence mode="wait">
-            {selectedForm && (
-              <motion.div
-                key={selectedForm.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="text-center"
-              >
-                <h3 className="text-2xl font-bold text-gray-800 mb-4">{selectedForm.title}</h3>
-                {selectedForm.description && (
-                  <p className="mb-6 text-gray-600">{selectedForm.description}</p>
-                )}
-                <p className="mb-4 text-lg font-medium text-gray-700">
-                  Number of questions: {selectedForm.questions.length}
-                </p>
-                {selectedForm.filled ? (
-                  <>
-                    <p className="text-green-600 font-semibold mb-4">
-                      You have filled this form!
-                    </p>
-                    <Button 
-                      onClick={handleViewResponses} 
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full shadow-md transition-all duration-300 transform hover:scale-105"
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-pink-100 via-transparent to-purple-100 opacity-70" />
+      
+      <div className="relative z-10 container mx-auto p-8 pt-40">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Card className="w-full max-w-4xl mx-auto overflow-hidden backdrop-blur-sm bg-white/95 shadow-md hover:shadow-lg transition-all duration-300">
+            <CardHeader className="bg-gradient-to-r from-pink-200 to-purple-300 text-gray-800 p-8">
+              <div className="flex items-center gap-3 mb-4">
+                <ClipboardList className="w-8 h-8 text-gray-600" />
+                <CardTitle className="text-3xl font-semibold">Your Forms</CardTitle>
+              </div>
+              <CardDescription className="text-gray-600 text-lg">
+                Manage your form responses
+              </CardDescription>
+            </CardHeader>
+            
+            <CardContent className="p-8 space-y-8">
+              <Select onValueChange={handleSelectForm}>
+                <SelectTrigger className="w-full h-12 text-lg bg-white shadow-sm border-gray-200">
+                  <SelectValue placeholder="Choose a form to view" />
+                </SelectTrigger>
+                <SelectContent>
+                  {forms.map((form) => (
+                    <SelectItem 
+                      key={form.id} 
+                      value={form.id}
+                      className="flex items-center justify-between"
                     >
-                      View Responses
-                    </Button>
-                  </>
-                ) : (
-                  <p className="text-yellow-600 font-semibold">You have not filled this form yet.</p>
+                      <span>{form.title}</span>
+                      {form.filled && (
+                        <span className="ml-2 text-sm px-2 py-1 bg-green-100 text-green-700 rounded-full">
+                          Completed
+                        </span>
+                      )}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <AnimatePresence mode="wait">
+                {selectedForm && (
+                  <motion.div
+                    key={selectedForm.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="space-y-6"
+                  >
+                    <div className="text-center space-y-4 p-6 rounded-xl bg-gradient-to-br from-white to-gray-50 shadow-sm">
+                      <h3 className="text-2xl font-bold text-gray-700">
+                        {selectedForm.title}
+                      </h3>
+                      {selectedForm.description && (
+                        <p className="text-gray-600">{selectedForm.description}</p>
+                      )}
+                      <div className="flex items-center justify-center gap-2 text-gray-600">
+                        <ClipboardList className="w-5 h-5" />
+                        <span>{selectedForm.questions.length} questions</span>
+                      </div>
+                    </div>
+
+                    {selectedForm.filled ? (
+                      <motion.div 
+                        className="text-center space-y-4"
+                        initial={{ scale: 0.9 }}
+                        animate={{ scale: 1 }}
+                      >
+                        <Button
+                          onClick={handleViewResponses}
+                          className="px-8 py-6 text-lg bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white shadow-lg transform hover:scale-105 transition-all duration-300"
+                        >
+                          View Your Responses
+                          <ChevronRight className="ml-2 w-5 h-5" />
+                        </Button>
+                      </motion.div>
+                    ) : (
+                      <p className="text-center text-yellow-600 bg-yellow-50 p-4 rounded-lg">
+                        You haven&apos;t filled this form yet
+                      </p>
+                    )}
+                  </motion.div>
                 )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </CardContent>
-      </Card>
+              </AnimatePresence>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
     </div>
   );
 }

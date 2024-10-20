@@ -322,7 +322,7 @@ export default function UserProfile() {
   }
 
   return (
-    <div className="p-6 mt-4 pb-24">
+    <div className="p-6 py-24">
       <div className="max-w-6xl mx-auto">
         <AHHHHBACKKKKK />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

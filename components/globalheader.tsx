@@ -7,7 +7,8 @@ import NavigationBurger from './NavigationMenu';
 
 const GlobalHeader = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
+  const [windowWidth, setWindowWidth] = useState(0);
+  const [isMounted, setIsMounted] = useState(false); // New state to track mounting
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,6 +19,10 @@ const GlobalHeader = () => {
       setWindowWidth(window.innerWidth);
     };
 
+    // Set the window width after mounting and add event listeners
+    setWindowWidth(window.innerWidth);
+    setIsMounted(true); // Mark as mounted
+
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('resize', handleResize);
 
@@ -27,12 +32,13 @@ const GlobalHeader = () => {
     };
   }, []);
 
+  // Conditionally apply size-based class only when the component is mounted
   const headerClass = `
     fixed top-4 left-1/2 transform -translate-x-1/2 
-    bg-white rounded-full shadow-lg z-20
+    bg-white rounded-full shadow-lg z-50
     transition-all duration-300 ease-in-out
-    ${isScrolled ? 'py-2 px-4' : 'py-3 px-6'}
-    ${windowWidth > 1024 ? 'lg:py-4 lg:px-8' : ''}
+    ${isScrolled ? 'py-2 px-4' : 'py-5 px-24'}
+    ${isMounted && windowWidth > 1024 ? 'lg:py-3 lg:px-8' : ''}
   `;
 
   return (
@@ -44,11 +50,12 @@ const GlobalHeader = () => {
             <div className="flex items-center space-x-2">
               <div className="relative group">
                 <a href='/'>
-                <img 
-                  src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1727879247/gdgc/gdgc-logo_qkziza.png" 
-                  alt="GDGC PCCoE Logo" 
-                  className={`group-hover:rotate-12 transition-transform duration-300 aspect-auto w-14 h-5 lg:w-12 lg:h-6 ease-in-out`}
-                />
+                  <img 
+                    src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1727879247/gdgc/gdgc-logo_qkziza.png" 
+                    alt="GDGC PCCoE Logo" 
+                    className={`group-hover:rotate-12 transition-transform duration-300 ease-in-out 
+                      w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-16 lg:h-16 object-contain`}
+                  />
                 </a>
               </div>
               <div className="hidden md:block">

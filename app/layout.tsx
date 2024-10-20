@@ -77,7 +77,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       > 
         <GlobalHeader />
-          <div className="pt-16  bg-gradient-to-br from-blue-200 to-purple-200">
+          <div className="bg-gradient-to-br from-blue-200 to-purple-200">
             {children}
           </div>
       </body>
