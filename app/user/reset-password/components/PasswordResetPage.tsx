@@ -19,16 +19,21 @@ const PasswordResetPage = () => {
   const supabase = createClient();
 
   useEffect(() => {
-    const token_hash = searchParams.get('token_hash');
-    const access_token = searchParams.get('access_token');
+    const token = searchParams.get('token');
     
-    if (token_hash && access_token) {
-      supabase.auth.verifyOtp({ token_hash, type: 'recovery', token: access_token })
-        .then(({ error }) => {
-          if (error) {
-            setError('Invalid or expired reset token. Please try resetting your password again.');
-          }
-        });
+    if (token) {
+      const email = searchParams.get('email');
+      if (email) {
+        supabase.auth.verifyOtp({ token, type: 'recovery', email })
+          .then(({ error }) => {
+            if (error) {
+              console.error('Token verification error:', error);
+              setError('Invalid or expired reset token. Please try resetting your password again.');
+            }
+          });
+      } else {
+        setError('Invalid or missing email. Please try resetting your password again.');
+      }
     } else {
       setError('Invalid or missing reset token. Please try resetting your password again.');
     }
@@ -74,7 +79,7 @@ const PasswordResetPage = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-purple-100">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md m-6">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">Reset Your Password</CardTitle>
         </CardHeader>

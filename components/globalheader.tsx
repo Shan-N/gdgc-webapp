@@ -8,7 +8,7 @@ import NavigationBurger from './NavigationMenu';
 const GlobalHeader = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0);
-  const [isMounted, setIsMounted] = useState(false); // New state to track mounting
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,9 +19,8 @@ const GlobalHeader = () => {
       setWindowWidth(window.innerWidth);
     };
 
-    // Set the window width after mounting and add event listeners
     setWindowWidth(window.innerWidth);
-    setIsMounted(true); // Mark as mounted
+    setIsMounted(true);
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('resize', handleResize);
@@ -32,7 +31,6 @@ const GlobalHeader = () => {
     };
   }, []);
 
-  // Conditionally apply size-based class only when the component is mounted
   const headerClass = `
     fixed top-4 left-1/2 transform -translate-x-1/2 
     bg-white rounded-full shadow-lg z-50
@@ -48,13 +46,15 @@ const GlobalHeader = () => {
           <div className="flex items-center space-x-2 md:space-x-4">
             <NavigationBurger />
             <div className="flex items-center space-x-2">
-              <div className="relative group">
+            <div className="relative group flex-shrink-0">
                 <a href='/'>
-                  <img 
+                <img 
                     src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1727879247/gdgc/gdgc-logo_qkziza.png" 
                     alt="GDGC PCCoE Logo" 
                     className={`group-hover:rotate-12 transition-transform duration-300 ease-in-out 
-                      w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-16 lg:h-16 object-contain`}
+                      w-12 h-12 sm:w-14 sm:h-14 md:w-14 md:h-14 lg:w-14 lg:h-14
+                      max-w-[100px] max-h-[100px] sm:max-w-[120px] sm:max-h-[120px] md:max-w-[140px] md:max-h-[140px] lg:max-w-[160px] lg:max-h-[160px]
+                      object-contain`}
                   />
                 </a>
               </div>

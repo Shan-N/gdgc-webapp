@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/user/reset-password`,
-  })
+  });
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 })
