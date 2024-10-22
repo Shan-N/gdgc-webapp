@@ -18,7 +18,7 @@ const SignUpForm = () => {
   const router = useRouter();
 
   const validateEmail = (email: string) => {
-    if (!email.endsWith('@gmail.com')) {
+    if (!email.endsWith('@pccoepune.org')) {
       setEmailError('Only emails ending with @pccoepune.org are allowed');
       return false;
     }
