@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Card } from "@/components/ui/card"
 import { Github, Linkedin, ChevronRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import Link from 'next/link';
 
 export interface TeamMemberProps {
   username: string
@@ -43,6 +44,7 @@ export default function Component({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
+      <Link href={`/teams/${username}`}>
       <Card className="overflow-hidden bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-300">
         <div className="relative">
           <div
@@ -104,6 +106,7 @@ export default function Component({
           <ChevronRight size={16} className="text-gray-600" />
         </div>
       </Card>
+      </Link>
     </motion.div>
   )
 }
