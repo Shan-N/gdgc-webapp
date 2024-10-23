@@ -41,10 +41,10 @@ export default function Home() {
 
 
   return (
-      <main className="items-center justify-items-center min-h-screen  font-[family-name:var(--font-geist-sans)]">
+      <main className="items-center justify-items-center font-[family-name:var(--font-geist-sans)]">
         {showIntroduction && <IntroAnimation />}
 
-        <div className="relative">
+        <div>
           <WavyBackground className="pb-36" />
           <div className={`transition-opacity p-4 duration-500 ${showIntroduction ? 'opacity-0' : 'opacity-100'}`}>
             <div className={bebasNeue.className}>
@@ -53,7 +53,7 @@ export default function Home() {
             <p className="text-center z-20 text-gray-600 mb-6 text-lg">Google Developer Group on Campus, Pimpri Chinchwad College of Engineering, Pune</p>
           </div>
         </div>
-        <div className="mt-6 pb-6 overflow-hidden">
+        <div className="mt-6 pb-6">
           {introFinished && (
             <>
               <DiscordPromoCard />

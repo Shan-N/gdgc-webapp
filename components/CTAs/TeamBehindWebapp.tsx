@@ -41,7 +41,7 @@ const TeamCardWebapp = () => {
             </a>
           </div>
           <motion.div 
-            className="mt-8 md:mt-0 md:absolute md:-right-16 md:top-1/2 md:transform md:-translate-y-1/2"
+            className="mt-8 md:mt-0 md:absolute md:-right-16 md:top-1/2 md:transform md:-translate-y-1/2 z-20"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6, duration: 0.5 }}
@@ -54,7 +54,6 @@ const TeamCardWebapp = () => {
           </motion.div>
         </div>
         
-        {/* Overflowing "Check this out!" element */}
         <motion.div 
           className="absolute -top-5 -right-5 bg-yellow-400 text-orange-700 font-bold py-2 px-4 rounded-full shadow-lg transform rotate-12"
           initial={{ opacity: 0, scale: 0.5 }}
