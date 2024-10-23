@@ -1,10 +1,10 @@
 import React, { Suspense } from 'react';
-import ForgotPassword from '../forgot-password/components/forget-password';
+import ResetPassword from './components/reset-password';
 
 export default function Page() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <ForgotPassword />
+      <ResetPassword />
     </Suspense>
   );
 }
