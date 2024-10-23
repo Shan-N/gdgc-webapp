@@ -52,20 +52,23 @@ export default function TeamMemberProfile() {
     return <div className="flex items-center justify-center h-screen text-2xl font-bold text-[#DB4437]">Member not found</div>;
   }
 
+  const displayField = member.field || 'OTHER';
+
   return (
-    <div className="container mx-auto px-4 py-8 min-h-screen">
+    <div className="max-w-4xl mx-auto container px-4 pt-36 pb-8 min-h-screen">
       <Link href="/teams" passHref>
         <Button variant="ghost" className="mb-6 text-[#4285F4] hover:text-[#4285F4] hover:bg-[#E8F0FE]">
           <ArrowLeft className="mr-2 h-4 w-4" /> Back to Team
         </Button>
       </Link>
-      <Card className="max-w-4xl mx-auto overflow-hidden bg-[#FEEAE6]">
+      <Card className="overflow-hidden bg-[#FEEAE6]">
         <CardContent className="p-0">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2 p-8">
               <div className="text-sm font-medium text-[#4285F4] mb-2">HI, MY NAME IS</div>
               <h1 className="text-6xl font-bold text-[#DB4437] mb-4">{member.full_name.split(' ')[0].toUpperCase()}</h1>
-              <div className="text-xl font-medium text-[#0F9D58] mb-4">*({member.field.toUpperCase()})</div>
+              <div className="text-xl font-medium text-[#0F9D58] mb-4">*({displayField.toUpperCase()})*</div>
+
               <p className="text-sm text-[#5F6368] mb-6">
                 {member.full_name}, {member.current_year} year {member.current_branch} student, organizes tech events, facilitates
                 learning, and builds a student developer community, bridging campus talent
@@ -76,7 +79,7 @@ export default function TeamMemberProfile() {
                   {member.current_branch}
                 </Button>
                 <Button variant="outline" className="rounded-full text-[#0F9D58] border-[#0F9D58] hover:bg-[#E6F4EA]">
-                  {member.field}
+                  {displayField}
                 </Button>
               </div>
               <div className="text-sm font-medium text-[#5F6368]">@{member.username}</div>
@@ -87,13 +90,6 @@ export default function TeamMemberProfile() {
                 alt={`${member.full_name}'s avatar`}
                 className="w-full h-full object-cover"
               />
-              {/* <div className="absolute bottom-4 left-4 bg-white rounded-full overflow-hidden border-2 border-[#DB4437] w-24 h-24">
-                <img
-                  src={member.avatar_url || '/default-avatar.png'}
-                  alt={`${member.full_name}'s avatar`}
-                  className="w-full h-full object-cover"
-                />
-              </div> */}
             </div>
           </div>
         </CardContent>
