@@ -1,0 +1,11 @@
+[
+  {
+    "slug": "blog/01-gdgc-intro",
+    "title": "GDGC @ PCCoE",
+    "description": "This is first blog",
+    "date": "2024-11-03T00:00:00.000Z",
+    "published": true,
+    "body": "const{Fragment:n,jsx:e,jsxs:t}=arguments[0];function _createMdxContent(r){const o={h1:\"h1\",p:\"p\",...r.components};return t(n,{children:[e(o.h1,{children:\"Hello from GDGC PCCoE\"}),\"\\n\",e(o.p,{children:\"Welcome to our first blog.\"})]})}return{default:function(n={}){const{wrapper:t}=n.components||{};return t?e(t,{...n,children:e(_createMdxContent,{...n})}):_createMdxContent(n)}};",
+    "slugAsParams": "01-gdgc-intro"
+  }
+]

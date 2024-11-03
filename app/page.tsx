@@ -7,6 +7,7 @@ import DiscordPromoCard from '@/components/CTAs/Discord';
 import TeamCard from '@/components/CTAs/MeetTheTeam';
 import RFIDCard from '@/components/CTAs/RFIDCard';
 import TeamCardWebapp from '@/components/CTAs/TeamBehindWebapp';
+import OurBlogs from '@/components/CTAs/OurBlogs';
 import { WavyBackground } from '@/components/ui/wavy-background';
 import { Bebas_Neue } from "next/font/google";
 import EventsPromoCard from '@/components/CTAs/EventsPromoCard';
@@ -97,6 +98,7 @@ export default function Home() {
           <TeamCard />
           <RFIDCard />
           <TeamCardWebapp />
+          <OurBlogs/>
           <EventsPromoCard />
         </div>
       </div>

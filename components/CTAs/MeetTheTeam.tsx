@@ -1,19 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Users } from 'lucide-react'
+import { Users } from 'lucide-react';
 
 interface TeamMember {
-  avatar_url: string | null; // Allow avatar_url to be null
+  avatar_url: string | null;
   username: string;
 }
 
 const TeamCard = () => {
-  const [teamMembers, setTeamMembers] = React.useState<TeamMember[]>([]);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchTeamMembers = async () => {
       try {
         const response = await fetch('/api/team');
+        if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         setTeamMembers(data);
       } catch (error) {
@@ -23,9 +24,12 @@ const TeamCard = () => {
     fetchTeamMembers();
   }, []);
 
+  const visibleTeamMembers = teamMembers.filter((member) => member.avatar_url !== null).slice(0, 6);
+  const placeholders = Array.from({ length: 6 - visibleTeamMembers.length });
+
   return (
     <div className="flex justify-center items-center p-4">
-      <motion.div 
+      <motion.div
         className="relative bg-gradient-to-br from-teal-500 to-emerald-600 text-white rounded-3xl shadow-xl overflow-hidden max-w-4xl w-full"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -33,7 +37,7 @@ const TeamCard = () => {
       >
         <div className="flex flex-col md:flex-row items-center p-8">
           <div className="flex-1 z-10">
-            <motion.h2 
+            <motion.h2
               className="text-3xl md:text-4xl font-bold mb-4"
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -41,7 +45,7 @@ const TeamCard = () => {
             >
               Meet Our Team
             </motion.h2>
-            <motion.p 
+            <motion.p
               className="mb-6 text-lg"
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -49,43 +53,40 @@ const TeamCard = () => {
             >
               Discover the passionate minds behind our innovation!
             </motion.p>
-            <a href='/teams'>
-                <motion.button 
+            <a href="/teams">
+              <motion.button
                 className="bg-white text-teal-600 font-bold py-2 px-6 rounded-full hover:bg-opacity-90 transition duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                >
+              >
                 <Users className="inline-block mr-2" />
                 View Team
-                </motion.button>
+              </motion.button>
             </a>
           </div>
-          <motion.div 
+          <motion.div
             className="mt-8 md:mt-0 md:ml-8"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
             <div className="grid grid-cols-3 gap-4">
-              {teamMembers.filter(member => member.avatar_url !== null).slice(0, 6).map((member, index) => {
-                return (
-                  <div key={index} className="w-16 h-16 bg-white rounded-full overflow-hidden flex items-center justify-center">
-                    <picture>
-                      <img 
-                        src={member.avatar_url || 'avatar'}
-                        alt={member.username}
-                        className="w-full h-full object-cover"
-                      />
-                    </picture>
-                  </div>
-                );
-              }).concat(Array(6 - teamMembers.filter(member => member.avatar_url !== null).slice(0, 6).length).fill(0).map((_, index) => {
-                return (
-                  <div key={index} className="w-16 h-16 bg-white rounded-full overflow-hidden flex items-center justify-center">
-                    <div className="w-full h-full bg-gray-300 rounded-full" />
-                  </div>
-                );
-              }))}
+              {visibleTeamMembers.map((member, index) => (
+                <div key={index} className="w-16 h-16 bg-white rounded-full overflow-hidden flex items-center justify-center">
+                  <picture>
+                    <img
+                      src={member.avatar_url || 'avatar'}
+                      alt={member.username}
+                      className="w-full h-full object-cover"
+                    />
+                  </picture>
+                </div>
+              ))}
+              {placeholders.map((_, index) => (
+                <div key={`placeholder-${index}`} className="w-16 h-16 bg-white rounded-full overflow-hidden flex items-center justify-center">
+                  <div className="w-full h-full bg-gray-300 rounded-full" />
+                </div>
+              ))}
             </div>
           </motion.div>
         </div>

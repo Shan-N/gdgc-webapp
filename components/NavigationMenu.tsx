@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { CreditCard, Home, Info, Menu, PersonStanding, Smartphone } from 'lucide-react';
+import { CreditCard, Home, Info, Menu, PersonStanding, Smartphone,Newspaper} from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
@@ -50,6 +50,7 @@ export default function NavigationBurger() {
               <NavItem icon={CreditCard} label="RFID" href="/" color="text-red-600" />
               <NavItem icon={PersonStanding} label="Our Team" href="/" color="text-green-600" />
               <NavItem icon={Smartphone} label="Team behind the Webapp" href="/" color="text-yellow-600" />
+              <NavItem icon={Newspaper} label="Blogs" href="/" color="text-orange-600" />
             </nav>
             <div className="absolute bottom-6 left-6 right-6">
               <p className="text-sm text-gray-600">Google Developer Student Clubs, Pimpri Chinchwad College of Engineering, Pune</p>
